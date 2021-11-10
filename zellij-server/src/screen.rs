@@ -35,6 +35,8 @@ pub(crate) enum ScreenInstruction {
     ResizeRight(ClientId),
     ResizeDown(ClientId),
     ResizeUp(ClientId),
+    ResizeIncrease(ClientId),
+    ResizeDecrease(ClientId),
     SwitchFocus(ClientId),
     FocusNextPane(ClientId),
     FocusPreviousPane(ClientId),
@@ -76,6 +78,7 @@ pub(crate) enum ScreenInstruction {
     TerminalResize(Size),
     ChangeMode(ModeInfo, ClientId),
     LeftClick(Position, ClientId),
+    RightClick(Position, ClientId),
     MouseRelease(Position, ClientId),
     MouseHold(Position, ClientId),
     Copy(ClientId),
@@ -96,6 +99,8 @@ impl From<&ScreenInstruction> for ScreenContext {
             ScreenInstruction::ResizeRight(..) => ScreenContext::ResizeRight,
             ScreenInstruction::ResizeDown(..) => ScreenContext::ResizeDown,
             ScreenInstruction::ResizeUp(..) => ScreenContext::ResizeUp,
+            ScreenInstruction::ResizeIncrease(..) => ScreenContext::ResizeIncrease,
+            ScreenInstruction::ResizeDecrease(..) => ScreenContext::ResizeDecrease,
             ScreenInstruction::SwitchFocus(..) => ScreenContext::SwitchFocus,
             ScreenInstruction::FocusNextPane(..) => ScreenContext::FocusNextPane,
             ScreenInstruction::FocusPreviousPane(..) => ScreenContext::FocusPreviousPane,
@@ -142,6 +147,7 @@ impl From<&ScreenInstruction> for ScreenContext {
             ScreenInstruction::ScrollUpAt(..) => ScreenContext::ScrollUpAt,
             ScreenInstruction::ScrollDownAt(..) => ScreenContext::ScrollDownAt,
             ScreenInstruction::LeftClick(..) => ScreenContext::LeftClick,
+            ScreenInstruction::RightClick(..) => ScreenContext::RightClick,
             ScreenInstruction::MouseRelease(..) => ScreenContext::MouseRelease,
             ScreenInstruction::MouseHold(..) => ScreenContext::MouseHold,
             ScreenInstruction::Copy(..) => ScreenContext::Copy,
@@ -661,6 +667,22 @@ pub(crate) fn screen_thread_main(
 
                 screen.render();
             }
+            ScreenInstruction::ResizeIncrease(client_id) => {
+                screen
+                    .get_active_tab_mut(client_id)
+                    .unwrap()
+                    .resize_increase();
+
+                screen.render();
+            }
+            ScreenInstruction::ResizeDecrease(client_id) => {
+                screen
+                    .get_active_tab_mut(client_id)
+                    .unwrap()
+                    .resize_decrease();
+
+                screen.render();
+            }
             ScreenInstruction::SwitchFocus(client_id) => {
                 screen.get_active_tab_mut(client_id).unwrap().move_focus();
 
@@ -990,6 +1012,14 @@ pub(crate) fn screen_thread_main(
                     .get_active_tab_mut(client_id)
                     .unwrap()
                     .handle_left_click(&point);
+
+                screen.render();
+            }
+            ScreenInstruction::RightClick(point, client_id) => {
+                screen
+                    .get_active_tab_mut(client_id)
+                    .unwrap()
+                    .handle_right_click(&point);
 
                 screen.render();
             }
