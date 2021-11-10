@@ -38,6 +38,10 @@ cargo make install /path/of/zellij/binary
 cargo make publish
 # Update manpage
 cargo make manpage
+# Format all packages
+cargo fmt
+# Update snapshots
+cargo insta review --workspace-root src/tests/
 ```
 
 To run `install` or `publish`, you'll need the package `binaryen` in the
