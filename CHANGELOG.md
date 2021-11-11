@@ -5,8 +5,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## [Unreleased]
-* Add: add initial session name to layout template (https://github.com/zellij-org/zellij/pull/789)
+* Add: suggestion for similar session name, on attach (https://github.com/zellij-org/zellij/pull/843)
+* Fix: handling and overwriting options through the cli (https://github.com/zellij-org/zellij/pull/859)
+
+  THIS IS A BREAKING CHANGE:
+  Previously it was only possible to turn off certain features through the cli,
+  now it also is possible to overwrite this behavior - for that the following changed:
+
+  - renamed and inverted:
+  ```
+  disable_mouse_mode -> mouse_mode
+  no_pane_frames -> pane_frames
+  ```
+  - cli options added:
+  ```
+  mouse-mode [bool]
+  pane-frames [bool]
+  simplified-ui [bool]
+  ```
+  - cli flag removed:
+  ```
+  simplified-ui
+  ```
+
+  Now the cli options can optionally be toggled on, even if the config
+  turns it off, example:
+  ```
+  zellij options --mouse-mode true
+  ```
+
+
+
+## [0.20.1] - 2021-11-10
+* Add: initial session name to layout template (https://github.com/zellij-org/zellij/pull/789)
 * Fix: simplify matches (https://github.com/zellij-org/zellij/pull/844)
+* Add: support darwin builds on ci (https://github.com/zellij-org/zellij/pull/846)
+* Add: e2e instructions for x86 and arm darwin systems (https://github.com/zellij-org/zellij/pull/846)
+* Fix: use key-value style for `docker-compose` (https://github.com/zellij-org/zellij/issues/338)
+* Fix: unify zellij environment variable handling (https://github.com/zellij-org/zellij/pull/842)
+* Add: toggle boolean options with cli flags (https://github.com/zellij-org/zellij/pull/855)
+
+* HOTFIX: fix pasting regression (https://github.com/zellij-org/zellij/pull/858)
 
 ## [0.20.0] - 2021-11-08
 * Fix: improve performance of echoed keystrokes (https://github.com/zellij-org/zellij/pull/798)
